@@ -53,3 +53,15 @@ def timing(function):
         print('elapse time is {} seconds'.format(end-start))
         return result
     return wrapper
+@timing
+def test_timing_stub():
+    print("test timing stub!")
+
+@exception
+def test_exception_stub():
+    print("test exception stub!")
+    errorresult=1/0
+
+if __name__ == "__main__":
+    test_timing_stub()
+    test_exception_stub()

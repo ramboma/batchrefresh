@@ -3,6 +3,8 @@ import decorator
 import sys
 import os
 import queue
+import datacopy
+import publish
 
 """Main module."""
 
@@ -60,12 +62,16 @@ def main():
             break
         #操作当前目录
         print(item)
-        os.path
+        # 执行复制操作
+        datacopy.copy_dictory_to_target(item.source,item.target)
+        # 执行脚本命令,发布数据源
+        cmdline=refresh_config['publish']['cli-path']
+        publishresult=publish.exec_publish(cmdline)
+        if publishresult==False:
+            print("更新数据源失败")
+        # 调用报告生成接口
     
     print("------------------------")
-    # 执行复制操作
-    # 执行脚本命令,发布数据源
-    # 调用报告生成接口
     print("执行完毕!")
 
 
