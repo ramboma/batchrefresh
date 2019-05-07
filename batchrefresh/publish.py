@@ -9,7 +9,7 @@ def exec_publish(cmdline):#执行发布脚本并返回
     # 执行正确,返回True
     return True
 def test():
-    cmdline=r'D:\ProgramFiles\Tableau\Tableau Prep Builder 2019.1\scripts\tableau-prep-cli.bat -c flow.json -t flow.tfl'
+    cmdline=r'"D:\ProgramFiles\Tableau\Tableau Prep Builder 2019.1\scripts\tableau-prep-cli.bat" -c "flow.json" -t "flow.tfl"'
     exec_publish(cmdline)
 
 if __name__ == "__main__":

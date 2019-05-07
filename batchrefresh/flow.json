@@ -1,0 +1,9 @@
+{
+"inputConnections":[],
+"outputConnections":[
+  {
+    "serverUrl":"http://10.10.3.31",
+    "contentUrl":"ros",
+    "username":"tabadmin",
+    "password":"123456"
+  }
