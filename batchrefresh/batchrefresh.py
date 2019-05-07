@@ -45,16 +45,23 @@ refresh_config = {
         'subfix': ''
     }
 }
+
+#执行学院报告生成
 @decorator.timing
-def main():
+def college_batch_generate():
     # 设置任务队列
-    #获取子目录列表,加入到队列
+    # 查找是否有未完成的队列文件,有则加载,无则初始化队列
+    # taskqueuename='first'
+    # exectype=0 # 0为新的执行任务 1为继续执行中断的任务
+    # taskqueuepath=r'c:\{}.txt'.format(taskqueuename)
+    #获取学院子目录列表,加入到队列
     dirlist=os.listdir(refresh_config['export']['source-data-path'])
     print(dirlist)
     taskqueue=queue.Queue()
     for onedir in dirlist:
-        if(os.path.isdir(onedir)):
+        if os.path.isdir(onedir) and onedir<>'空学院':
             taskqueue.put(onedir)
+
     print("------------------------")
     while True:
         item=taskqueue.get()
@@ -74,5 +81,5 @@ def main():
     print("------------------------")
     print("执行完毕!")
 
-
-main()
+if __name__ == "__main__":
+    college_batch_generate()
