@@ -3,8 +3,10 @@ import decorator
 import sys
 import os
 import queue
+
 import fileexport
 import publish
+import httpinvoke
 
 """Main module."""
 
@@ -45,9 +47,9 @@ college_report_config={
         'download_param':{"planProcessInfoId":"{}"},
         'download_filename':r'e:\newjincin\projects\ros\doc\refresh\output\分学院\{}.docx',
         'cookies':{
-            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcxNDIwMzl9.UwU11TRLhf5W23E9JRlJiUdl34CNdlsW8tZVMpprn81oEgjg1YJjgFpT6jVPYQ4YCegz3mK2oBvn_0kWaNDuhdJnXGuYELuxh8niVRCVlC4Zp7Lq4F3s3WPAWc4RPxR-nLODKfRFFmHT5af0CJcr35VhjRAp8QZjNSH8KvYGvFY',
+            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcyOTY0Mjd9.WgnckuJVVb2KpTmJmqCE5ULp5v83NTwiFJQYxADe0rAX8PnmsTsUf58KIzKwrx67uRysI9wFG72uL9MVxSCFiZjDEaeoQ4qXmgyT-10tzvgJ0AIsQzcuix03thLhi302mwNfHkKryY13eDMWe32cM86UyAuPoNpCURAnpXc2txk',
             'JSESSIONID':'F420351B4AD953795A66AC498B0FF18E',
-            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcxNDIwMzl9.UwU11TRLhf5W23E9JRlJiUdl34CNdlsW8tZVMpprn81oEgjg1YJjgFpT6jVPYQ4YCegz3mK2oBvn_0kWaNDuhdJnXGuYELuxh8niVRCVlC4Zp7Lq4F3s3WPAWc4RPxR-nLODKfRFFmHT5af0CJcr35VhjRAp8QZjNSH8KvYGvFY',
+            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcyOTY0Mjd9.WgnckuJVVb2KpTmJmqCE5ULp5v83NTwiFJQYxADe0rAX8PnmsTsUf58KIzKwrx67uRysI9wFG72uL9MVxSCFiZjDEaeoQ4qXmgyT-10tzvgJ0AIsQzcuix03thLhi302mwNfHkKryY13eDMWe32cM86UyAuPoNpCURAnpXc2txk',
         }
     }
 }
@@ -91,6 +93,12 @@ def college_batch_generate():
         if publishresult==False:
             print("更新数据源失败")
         # 调用报告生成接口
+        reportid="48" #本科毕业生社会需求与人才培养调研结果 方案id
+        reportname="{}2018届本科毕业生社会需求与人才培养调研结果".format(item)
+        reportconfig=college_report_config['http_config']
+        reportconfig['generate_param']['planId']=reportid
+        reportconfig['generate_param']['generateName']=reportname
+        httpinvoke.wrap_generate_and_download_report(reportconfig)
     print("------------------------")
     print("执行完毕!")
 

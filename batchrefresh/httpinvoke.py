@@ -3,14 +3,7 @@ import requests
 import decorator
 import json
 
-def wrap_generate_and_download_report(config={
-        'generate_url':'10.3.225:19700/v1/planProcessInfo/generatePlanWord',
-        'generate_param':{"planId":"27","generateName":"测试方案1-27-python生成2"},
-        'searchstatus_url':'http://10.10.3.225:19700/v1/planProcessInfo/getByUser/{}',
-        'download_url':'http://10.10.3.225:19700/v1/planProcessInfo/downloadPlanWord',
-        'download_param':{"planProcessInfoId":"229"},
-        'download_filename':r'c:\test3\{}.docx',
-        'cookies':'' }):
+def wrap_generate_and_download_report(config):
     print(config)
         
     generate_url=config['generate_url']
