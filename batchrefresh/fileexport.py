@@ -10,29 +10,7 @@ import majorcollege2dict
 2、如果是专业报告，需要上传16、17届各专业文件夹下对应专业的主数据源excel（一共2个),
 18届各专业文件夹下对应专业里的所有excel(大概是10-11个),除此之外还需要上传本专业对应的学院数据，及情况1中的数据源。
 '''
-# 多个学院名称匹配
-college_alias = {
-    "传媒学院": ['凤凰传媒学院']
-}
-college_config = {
-    "exportlist": [
-        {
-            'from': r'E:\newjincin\projects\ros\doc\16届数据\分院系\{}\主数据源.xlsx',
-            'to': r'c:\xycopy\test1',
-            'type': 'file'
-        },
-        {
-            'from': r'E:\newjincin\projects\ros\doc\17届数据\分院系\{}\主数据源.xlsx',
-            'to': r'c:\xycopy\test2',
-            'type': 'file'
-        },
-        {
-            'from': r'E:\newjincin\projects\ros\doc\18届数据\分院系\{}',
-            'to': r'c:\xycopy\test3',
-            'type': 'directory'
-        }
-    ]
-}
+
 major_config = {
     "exportlist": [
         {
@@ -78,16 +56,18 @@ def check_college_has_null_or_alias(college_name, college_path,college_alias):
 
 # 学院导出
 
-
-def college_filecopy(college_name='材料与化学化工学部'):
+def college_filecopy(college_name,college_config,college_alias):
     # 如果学院名称对应的路径不存在,就把学院名称替换为别名学院或"空学院"
-    for copyopt in copyconfig['exportlist']:
+    for copyopt in college_config['exportlist']:
         sourcepath = check_college_has_null_or_alias(
-            college_name, copyopt['from'])
+            college_name, copyopt['from'],college_alias)
         if copyopt['type'] == 'file':
             shutil.copy(sourcepath, copyopt['to'])
+            print('{}导出至{}!'.format(sourcepath,copyopt['to']))
         else:
             util.xcopy(sourcepath, copyopt['to'])
+            print('{}导出至{}!'.format(sourcepath,copyopt['to']))
+    print('{}导出完毕!'.format(college_name))
 # 专业导出
 def major_export(major_name, majorconfig):
 
@@ -101,11 +81,11 @@ def major_export(major_name, majorconfig):
     college_name = majorcollege2dict.major_college_mapping(majorconfig['college_major_mapping_file'])[major_name]
     print("专业{}对应的学院名称为{}".format(major_name, college_name))
     # 再导出相应学院
-    college_filecopy(college_name)
+    #college_filecopy(college_name)
 
 
 def test_college_filecopy():
-    college_filecopy()
+    #college_filecopy()
     print('test complete')
 
 
