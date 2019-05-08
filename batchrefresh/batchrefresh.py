@@ -32,7 +32,7 @@ college_report_config={
     },
     'college_alias':{"传媒学院": ['凤凰传媒学院']},#学院改名
 
-    'prep_cli_path':r'"D:\ProgramFiles\Tableau\Tableau Prep Builder 2019.1\scripts\tableau-prep-cli.bat" -c "{}" -t "{}"',
+    'prep_cli_path':r'"D:\Program Files\Tableau\TableauPrepBuilder2019\scripts\tableau-prep-cli.bat" -c "{}" -t "{}"',
     'tfl_path':r'e:\newjincin\projects\ros\doc\refresh\tfl\学院\学院.tfl',
     'flow_path':r'e:\newjincin\projects\ros\doc\refresh\tfl\学院\flow.json',
 
@@ -84,12 +84,13 @@ def college_batch_generate():
         # 执行复制操作
         fileexport.college_filecopy(item,college_report_config['exportconfig'],college_report_config['college_alias'])
         # 执行脚本命令,发布数据源
-        cmdline=college_report_config['publish']['cli-path']
+        cmdline=college_report_config['prep_cli_path'].format(
+            college_report_config['flow_path'],
+            college_report_config['tfl_path'])
         publishresult=publish.exec_publish(cmdline)
         if publishresult==False:
             print("更新数据源失败")
         # 调用报告生成接口
-    '''
     print("------------------------")
     print("执行完毕!")
 
