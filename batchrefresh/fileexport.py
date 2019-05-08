@@ -63,23 +63,24 @@ def college_filecopy(college_name,college_config,college_alias):
             college_name, copyopt['from'],college_alias)
         if copyopt['type'] == 'file':
             shutil.copy(sourcepath, copyopt['to'])
-            print('{}导出至{}!'.format(sourcepath,copyopt['to']))
         else:
             util.xcopy(sourcepath, copyopt['to'])
-            print('{}导出至{}!'.format(sourcepath,copyopt['to']))
+        print('{}导出至{}!'.format(sourcepath,copyopt['to']))
     print('{}导出完毕!'.format(college_name))
 # 专业导出
 def major_export(major_name, majorconfig):
-
+    print("专业{}开始导出...".format(major_name))
     for copyopt in majorconfig['exportlist']:
         sourcepath = copyopt['from'].format(major_name)
         if copyopt['type'] == 'file':
             shutil.copy(sourcepath, copyopt['to'])
         else:
             util.xcopy(sourcepath, copyopt['to'])
+        print('{}导出至{}!'.format(sourcepath,copyopt['to']))
     # 本专业对应的学院
-    college_name = majorcollege2dict.major_college_mapping(majorconfig['college_major_mapping_file'])[major_name]
-    print("专业{}对应的学院名称为{}".format(major_name, college_name))
+    #college_name = majorcollege2dict.major_college_mapping(majorconfig['college_major_mapping_file'])[major_name]
+    #print("专业{}对应的学院名称为{}".format(major_name, college_name))
+    print("专业{}导出完毕!".format(major_name))
     # 再导出相应学院
     #college_filecopy(college_name)
 

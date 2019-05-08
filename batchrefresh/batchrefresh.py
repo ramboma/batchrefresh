@@ -53,11 +53,54 @@ college_report_config={
         }
     }
 }
+major_report_config={
+    # 该目录下每个子目录名称为专业名
+    'source-base-path': r'E:\newjincin\projects\ros\doc\18届数据\分院系',
+    'exportconfig':{
+    "exportlist": [
+        {
+            'from': r'e:\newjincin\projects\ros\doc\16届数据\分院系\{}\主数据源.xlsx',
+            'to': r'e:\newjincin\projects\ros\doc\refresh\datasource\16届数据\分院系',
+            'type': 'file'
+        },
+        {
+            'from': r'E:\newjincin\projects\ros\doc\17届数据\分院系\{}\主数据源.xlsx',
+            'to': r'e:\newjincin\projects\ros\doc\refresh\datasource\17届数据\分院系',
+            'type': 'file'
+        },
+        {
+            'from': r'E:\newjincin\projects\ros\doc\18届数据\分院系\{}',
+            'to': r'e:\newjincin\projects\ros\doc\refresh\datasource\18届数据\分院系',
+            'type': 'directory'
+        }
+    ],
+    },
+    'college_alias':{"传媒学院": ['凤凰传媒学院']},#学院改名
+
+    'prep_cli_path':r'"D:\Program Files\Tableau\TableauPrepBuilder2019\scripts\tableau-prep-cli.bat" -c "{}" -t "{}"',
+    'tfl_path':r'e:\newjincin\projects\ros\doc\refresh\tfl\学院\学院.tfl',
+    'flow_path':r'e:\newjincin\projects\ros\doc\refresh\tfl\学院\flow.json',
+
+    'http_config':{
+        'generate_url':'http://10.10.3.225:19700/v1/planProcessInfo/generatePlanWord',
+        #planId(方案id)必填,报告名由学院名+报告+yyyy-MM-dd组成
+        'generate_param':{"planId":"27","generateName":""},
+        'searchstatus_url':'http://10.10.3.225:19700/v1/planProcessInfo/getByUser/{}',
+        'download_url':'http://10.10.3.225:19700/v1/planProcessInfo/downloadPlanWord',
+        'download_param':{"planProcessInfoId":"{}"},
+        'download_filename':r'e:\newjincin\projects\ros\doc\refresh\output\分学院\{}.docx',
+        'cookies':{
+            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcyOTY0Mjd9.WgnckuJVVb2KpTmJmqCE5ULp5v83NTwiFJQYxADe0rAX8PnmsTsUf58KIzKwrx67uRysI9wFG72uL9MVxSCFiZjDEaeoQ4qXmgyT-10tzvgJ0AIsQzcuix03thLhi302mwNfHkKryY13eDMWe32cM86UyAuPoNpCURAnpXc2txk',
+            'JSESSIONID':'F420351B4AD953795A66AC498B0FF18E',
+            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcyOTY0Mjd9.WgnckuJVVb2KpTmJmqCE5ULp5v83NTwiFJQYxADe0rAX8PnmsTsUf58KIzKwrx67uRysI9wFG72uL9MVxSCFiZjDEaeoQ4qXmgyT-10tzvgJ0AIsQzcuix03thLhi302mwNfHkKryY13eDMWe32cM86UyAuPoNpCURAnpXc2txk',
+        }
+    }
+}
 
 
 #执行学院报告生成
 @decorator.timing
-def college_batch_generate():
+def college_batch_generate():#type=1 只导出学院报告 2只导出专业报告 3导出学院和专业报告
     # 设置任务队列
     # 查找是否有未完成的队列文件,有则加载,无则初始化队列
     # taskqueuename='first'
@@ -96,6 +139,44 @@ def college_batch_generate():
         reportid="48" #本科毕业生社会需求与人才培养调研结果 方案id
         reportname="{}2018届本科毕业生社会需求与人才培养调研结果".format(item)
         reportconfig=college_report_config['http_config']
+        reportconfig['generate_param']['planId']=reportid
+        reportconfig['generate_param']['generateName']=reportname
+        httpinvoke.wrap_generate_and_download_report(reportconfig)
+    print("------------------------")
+    print("执行完毕!")
+def major_batch_generate():
+    #获取专业子目录列表,加入到队列
+    dirlist=os.listdir(major_report_config['source-base-path'])
+    print(dirlist)
+    taskqueue=queue.Queue()
+    for onedir in dirlist:
+        if onedir!='空专业':
+            taskqueue.put(onedir)
+            print(onedir)
+
+    print("------------------------")
+    while True:
+        if taskqueue.empty():
+            print('任务队列执行完毕!')
+            break
+        item=taskqueue.get()
+        if item is None:
+            break
+        #操作当前目录
+        print(item)
+        # 执行复制操作
+        fileexport.college_filecopy(item,major_report_config['exportconfig'],major_report_config['college_alias'])
+        # 执行脚本命令,发布数据源
+        cmdline=major_report_config['prep_cli_path'].format(
+            major_report_config['flow_path'],
+            major_report_config['tfl_path'])
+        publishresult=publish.exec_publish(cmdline)
+        if publishresult==False:
+            print("更新数据源失败")
+        # 调用报告生成接口
+        reportid="48" #本科毕业生社会需求与人才培养调研结果 方案id
+        reportname="{}2018届本科毕业生社会需求与人才培养调研结果".format(item)
+        reportconfig=major_report_config['http_config']
         reportconfig['generate_param']['planId']=reportid
         reportconfig['generate_param']['generateName']=reportname
         httpinvoke.wrap_generate_and_download_report(reportconfig)
