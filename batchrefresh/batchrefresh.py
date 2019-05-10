@@ -33,7 +33,9 @@ college_report_config={
         }
     ],
     },
-    'college_alias':{"传媒学院": ['凤凰传媒学院']},#学院改名
+    'college_alias':{"传媒学院": ['凤凰传媒学院'],
+        "轨道交通学院":['城市轨道交通学院']
+    },#学院改名
 
     'prep_cli_path':r'"D:\Program Files\Tableau\TableauPrepBuilder2019\scripts\tableau-prep-cli.bat" -c "{}" -t "{}"',
     'tfl_path':r'e:\newjincin\projects\ros\doc\refresh\tfl\学院\学院.tfl',
