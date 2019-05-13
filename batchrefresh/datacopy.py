@@ -1,6 +1,7 @@
 import os
 import decorator
 import shutil
+import util
 
 @decorator.exception
 def copy_dictory_to_target(source,target):
@@ -13,7 +14,7 @@ def copy_dictory_to_target(source,target):
         full_file_name = os.path.join(source, file_name)
         if (os.path.isfile(full_file_name)):
             shutil.copy(full_file_name, target)
-   print("copy {} to {} completed!".format(source,target))
+   util.print_and_info("copy {} to {} completed!".format(source,target))
 
 def test():
     source=r"c:\test1"

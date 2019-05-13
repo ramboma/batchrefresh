@@ -1,24 +1,7 @@
 import functools
 import logging
 from time import time
- 
-def create_logger():
-    """
-    Creates a logging object and returns it
-    """
-    logger = logging.getLogger("decorator")
-    logger.setLevel(logging.INFO)
- 
-    # create the logging file handler
-    fh = logging.FileHandler("decorator.log")
- 
-    fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    formatter = logging.Formatter(fmt)
-    fh.setFormatter(formatter)
- 
-    # add handler to logger object
-    logger.addHandler(fh)
-    return logger
+import util
  
  
 def exception(function):
@@ -28,14 +11,13 @@ def exception(function):
     """
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
-        logger = create_logger()
         try:
             return function(*args, **kwargs)
         except:
             # log the exception
             err = "There was an exception in  "
             err += function.__name__
-            logger.exception(err)
+            util.print_and_info(err)
  
             # re-raise the exception
             raise
@@ -50,7 +32,7 @@ def timing(function):
         start=time()
         result=function(*args, **kwargs)
         end=time()
-        print('elapse time is {} seconds'.format(end-start))
+        util.print_and_info('elapse time is {} seconds'.format(end-start))
         return result
     return wrapper
 @timing

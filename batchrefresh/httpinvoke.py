@@ -2,9 +2,10 @@ import time
 import requests
 import decorator
 import json
+import util
 
 def wrap_generate_and_download_report(config):
-    print(config)
+    util.print_and_info(config)
         
     generate_url=config['generate_url']
     generate_param=config['generate_param']
@@ -18,10 +19,10 @@ def wrap_generate_and_download_report(config):
     generateResultObj=json.loads(result)
     #判断报告生成请求是否发送成功
     if(generateResultObj['code']==0):
-        print("生成报告失败!错误原因:{}".format(generateResultObj['msg']))
-    print('报告正在生成...')
+        util.print_and_info("生成报告失败!错误原因:{}".format(generateResultObj['msg']))
+    util.print_and_info('报告正在生成...')
     reportid=generateResultObj['data']
-    print('报告id为{}'.format(reportid))
+    util.print_and_info('报告id为{}'.format(reportid))
     #隔1秒查询一次生成状态
     repeatCount=0
     while True:
@@ -29,12 +30,12 @@ def wrap_generate_and_download_report(config):
         statusResult=search_generator_status(searchstatus_url,cookies)
         statusResultObj=json.loads(statusResult)
         if(statusResultObj['code']==0):#如果调用接口失败,等待300ms重试,5次后中断
-            print('生成状态调用失败,错误原因:{}'.format(statusResultObj['msg']))
+            util.print_and_info('生成状态调用失败,错误原因:{}'.format(statusResultObj['msg']))
             repeatCount=repeatCount+1
             if repeatCount>=5:
                 break
         if(statusResultObj['data']['planProcessState']=='1'):
-            print('报表生成成功!正在下载...')
+            util.print_and_info('报表生成成功!正在下载...')
             #执行下载
             download_param['planProcessInfoId']=str(reportid)
             download_report(download_url,
@@ -43,22 +44,22 @@ def wrap_generate_and_download_report(config):
                             download_filename.format(generate_param['generateName']))
             break
         elif(statusResultObj['data']['planProcessState']=='-1'):#生成失败
-            print('报表生成失败')
+            util.print_and_info('报表生成失败')
             break
         else:
-            print('报表生成中...,信息:{}'.format(statusResultObj['data']['planProcessInfo']))
-            #间隔1s再查
-            time.sleep(1)
+            util.print_and_info('报表生成中...,信息:{}'.format(statusResultObj['data']['planProcessInfo']))
+            #间隔5s再查
+            time.sleep(10)
 
 #发出生成报告请求
 def generate_report(url,cookies,params=None):
     response = requests.get(url, cookies=cookies,params=params)
-    print(response.text)
+    util.print_and_info(response.text)
     return response.text
 #查询报告生成状态
 def search_generator_status(searchurl,cookies):
     searchresponse = requests.get(searchurl, cookies=cookies)
-    print(searchresponse.text)
+    util.print_and_info(searchresponse.text)
     return searchresponse.text
 #下载报告
 def download_report(downloadurl,cookies,params,file_name):
