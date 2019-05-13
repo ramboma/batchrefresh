@@ -13,7 +13,7 @@ import logging
 '''
 
 
-logger=util.create_logger(logging.INFO,'httpinvoke')
+logger=util.create_logger(logging.INFO,'fileexport')
 
 def print_and_info(msg):
     logger.info(msg)

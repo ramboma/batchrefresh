@@ -8,7 +8,7 @@ import logging
 import fileexport
 import publish
 import httpinvoke
-import majorcollege2dict
+from majorcollege2dict import majorcollege2dict
 
 import util
 
@@ -133,22 +133,30 @@ def print_and_info(msg):
 def backlog(msg):
     back_logger.info(msg)
 #执行学院报告生成
+'''
+type=1 只生成学院报告 2只生成专业报告 3生成学院和专业报告
+college_list 要处理的学院列表
+major_list 要处理的专业列表
+'''
 @decorator.timing
-def college_batch_generate(type):#type=1 只生成学院报告 2只生成专业报告 3生成学院和专业报告
+def college_batch_generate(type):
     # 设置任务队列
     # 查找是否有未完成的队列文件,有则加载,无则初始化队列
     # taskqueuename='first'
     # exectype=0 # 0为新的执行任务 1为继续执行中断的任务
     # taskqueuepath=r'c:\{}.txt'.format(taskqueuename)
+
+    # 读取配置文件
+    mapperObj=majorcollege2dict(college_major_mapping_path)
     #获取学院子目录列表,加入到队列
-    dirlist=os.listdir(college_report_config['source-base-path'])
+    #dirlist=os.listdir(college_report_config['source-base-path'])
+    dirlist=mapperObj.college_major_mapping()
     print_and_info(dirlist)
     taskqueue=queue.Queue()
     for onedir in dirlist:
         #if onedir=='政治与公共管理学院':
-        if onedir!='空学院' and onedir!='东吴商学院(财经学院)':
-            taskqueue.put(onedir)
-            print_and_info(onedir)
+        taskqueue.put(onedir)
+        print_and_info(onedir)
 
     print_and_info("------------------------")
     while True:
@@ -174,15 +182,18 @@ def college_batch_generate(type):#type=1 只生成学院报告 2只生成专业�
         if type==1:#只生成学院报告
             college_exec_generate_report(collegename,college_report_config['output_report_config'])
         elif type==2:#只生成专业报告
-            college_major_mapper=majorcollege2dict.college_major_mapping(college_major_mapping_path)
-            for majorname in college_major_mapper[collegename]:
-                major_generate(majorname)
+            for major_and_status in dirlist[collegename]:
+                majorname=major_and_status['major']
+                status=major_and_status['status']
+                if status==0:
+                    major_generate(majorname)
         else:#学院和专业都生成
             college_exec_generate_report(collegename,college_report_config['output_report_config'])
-            college_major_mapper=majorcollege2dict.college_major_mapping(college_major_mapping_path)
-            for majorname in college_major_mapper[collegename]:
-                #if majorname=='城市管理':
-                major_generate(majorname)
+            for major_and_status in dirlist[collegename]:
+                majorname=major_and_status['major']
+                status=major_and_status['status']
+                if status==0:
+                    major_generate(majorname)
     print_and_info("------------------------")
     print_and_info("执行完毕!")
 #生成学院报告
