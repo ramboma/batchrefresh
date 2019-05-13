@@ -212,6 +212,7 @@ def major_generate(majorname):
         print_and_info("{}更新数据源失败".format(majorname))
         backlog("{}更新数据源失败".format(majorname))
         return
+    backlog("{}更新数据源成功".format(majorname))
     # 调用报告生成接口
     for output_config in major_report_config['output_report_config']:
         reportid=output_config['planId']

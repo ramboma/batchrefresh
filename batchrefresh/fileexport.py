@@ -2,6 +2,7 @@ import os
 import shutil
 import util
 import majorcollege2dict
+import logging
 
 '''
 学院和专业数据文件拷贝
@@ -12,16 +13,21 @@ import majorcollege2dict
 '''
 
 
+logger=util.create_logger(logging.INFO,'httpinvoke')
+
+def print_and_info(msg):
+    logger.info(msg)
+    print(msg)
 # 检查学院路径是否存在,不存在就在alias列表中查找，有则替换,没有则返回'空学院'
 def check_college_has_null_or_alias(college_name, college_path, college_alias):
-    util.print_and_info(college_name)
+    print_and_info(college_name)
     path = college_path.format(college_name)
     if os.path.exists(path) == True:  # 存在则返回
         return path
     # 在alias列表中查找
     result = ''
     if college_name in college_alias:
-        util.print_and_info('{}->学院在路径上{}存在别名'.format(college_name, college_path))
+        print_and_info('{}->学院在路径上{}存在别名'.format(college_name, college_path))
         aliaslist = college_alias[college_name]
         for alias in aliaslist:
             aliaspath = college_path.format(alias)
@@ -29,7 +35,7 @@ def check_college_has_null_or_alias(college_name, college_path, college_alias):
                 result = aliaspath
                 break
     if result == '':  # 不在别名列表中,返回'空学院'
-        util.print_and_info("{}下学院名称不存在,将替换为空学院数据".format(path))
+        print_and_info("{}下学院名称不存在,将替换为空学院数据".format(path))
         result = college_path.format('空学院')
     return result
 
@@ -45,13 +51,13 @@ def college_filecopy(college_name, college_config, college_alias):
             shutil.copy(sourcepath, copyopt['to'])
         else:
             util.xcopy(sourcepath, copyopt['to'])
-        util.print_and_info('{}导出至--->{}!'.format(sourcepath, copyopt['to']))
-    util.print_and_info('{}导出完毕!'.format(college_name))
+        print('{}导出至--->{}!'.format(sourcepath, copyopt['to']))
+    print_and_info('{}导出完毕!'.format(college_name))
 
 
 # 检查专业路径是否存在，存在则返回，不存在则返回空专业
 def check_major_has_null_or_alias(major_name, major_path):
-    util.print_and_info(major_name)
+    print(major_name)
     path = major_path.format(major_name)
     if os.path.exists(path) == True:  # 存在则返回
         return path
@@ -60,18 +66,18 @@ def check_major_has_null_or_alias(major_name, major_path):
 # 专业导出
 
 def major_filecopy(major_name, majorconfig):
-    util.print_and_info("专业{}开始导出...".format(major_name))
+    print("专业{}开始导出...".format(major_name))
     for copyopt in majorconfig['exportlist']:
         sourcepath=check_major_has_null_or_alias(major_name,copyopt['from'])
         if copyopt['type'] == 'file':
             shutil.copy(sourcepath, copyopt['to'])
         else:
             util.xcopy(sourcepath, copyopt['to'])
-        util.print_and_info('{}导出至--->{}!'.format(sourcepath, copyopt['to']))
+        print('{}导出至--->{}!'.format(sourcepath, copyopt['to']))
     # 本专业对应的学院
     #college_name = majorcollege2dict.major_college_mapping(majorconfig['college_major_mapping_file'])[major_name]
     #print("专业{}对应的学院名称为{}".format(major_name, college_name))
-    util.print_and_info("专业{}导出完毕!".format(major_name))
+    print_and_info("专业{}导出完毕!".format(major_name))
     # 再导出相应学院
     # college_filecopy(college_name)
 

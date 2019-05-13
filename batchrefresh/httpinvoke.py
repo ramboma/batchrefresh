@@ -3,7 +3,16 @@ import requests
 import decorator
 import json
 import util
+import logging
 
+logger=util.create_logger(logging.INFO,'httpinvoke')
+back_logger=util.create_logger(logging.INFO,'back_logger')
+
+def print_and_info(msg):
+    logger.info(msg)
+    print(msg)
+def backlog(msg):
+    back_logger.info(msg)
 def wrap_generate_and_download_report(config):
     util.print_and_info(config)
         
@@ -19,10 +28,11 @@ def wrap_generate_and_download_report(config):
     generateResultObj=json.loads(result)
     #判断报告生成请求是否发送成功
     if(generateResultObj['code']==0):
-        util.print_and_info("生成报告失败!错误原因:{}".format(generateResultObj['msg']))
-    util.print_and_info('报告正在生成...')
+        print_and_info("生成报告失败!错误原因:{}".format(generateResultObj['msg']))
+        return
+    print_and_info('报告正在生成...')
     reportid=generateResultObj['data']
-    util.print_and_info('报告id为{}'.format(reportid))
+    print_and_info('报告id为{}'.format(reportid))
     #隔1秒查询一次生成状态
     repeatCount=0
     while True:
@@ -30,12 +40,12 @@ def wrap_generate_and_download_report(config):
         statusResult=search_generator_status(searchstatus_url,cookies)
         statusResultObj=json.loads(statusResult)
         if(statusResultObj['code']==0):#如果调用接口失败,等待300ms重试,5次后中断
-            util.print_and_info('生成状态调用失败,错误原因:{}'.format(statusResultObj['msg']))
+            print_and_info('生成状态调用失败,错误原因:{}'.format(statusResultObj['msg']))
             repeatCount=repeatCount+1
             if repeatCount>=5:
                 break
         if(statusResultObj['data']['planProcessState']=='1'):
-            util.print_and_info('报表生成成功!正在下载...')
+            print_and_info('报表生成成功!正在下载...')
             #执行下载
             download_param['planProcessInfoId']=str(reportid)
             download_report(download_url,
@@ -44,10 +54,10 @@ def wrap_generate_and_download_report(config):
                             download_filename.format(generate_param['generateName']))
             break
         elif(statusResultObj['data']['planProcessState']=='-1'):#生成失败
-            util.print_and_info('报表生成失败')
+            print_and_info('报表生成失败')
             break
         else:
-            util.print_and_info('报表生成中...,信息:{}'.format(statusResultObj['data']['planProcessInfo']))
+            print('报表生成中...,信息:{}'.format(statusResultObj['data']['planProcessInfo']))
             #间隔5s再查
             time.sleep(10)
 
