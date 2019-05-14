@@ -1,10 +1,15 @@
 import subprocess
 import decorator
+import logging
+import util
 
+
+logger=util.create_logger(logging.INFO,'publish')
 @decorator.exception
 def exec_publish(cmdline):#执行发布脚本并返回
     print(cmdline)
     execresult=subprocess.getstatusoutput(cmdline)
+    logger.info(execresult)
     print(execresult)
     # 如果执行错误,那么输出错误信息并返回False
     '''

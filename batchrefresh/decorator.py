@@ -19,7 +19,7 @@ def exception(function):
             # log the exception
             err = "There was an exception in  "
             err += function.__name__
-            util.print_and_info(err)
+            logger.error(err)
  
             # re-raise the exception
             raise
@@ -35,7 +35,6 @@ def timing(function):
         result=function(*args, **kwargs)
         end=time()
         util.print_and_info(function.__name__+' elapse time is {} seconds'.format(end-start))
-        util.print_and_info(function.__name__+' args is {} '.format("".join(args)))
         return result
     return wrapper
 @timing

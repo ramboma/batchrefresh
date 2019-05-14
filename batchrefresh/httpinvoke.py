@@ -13,6 +13,7 @@ def print_and_info(msg):
     print(msg)
 def backlog(msg):
     back_logger.info(msg)
+@decorator.exception
 def wrap_generate_and_download_report(config):
     util.print_and_info(config)
         
