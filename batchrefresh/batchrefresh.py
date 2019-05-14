@@ -152,6 +152,20 @@ def college_batch_generate(type):
     #dirlist=os.listdir(college_report_config['source-base-path'])
     dirlist=mapperObj.college_major_mapping()
     print_and_info(dirlist)
+    #如果学院下的所有专业都完成了,删除该学院
+    delete_key_list=[]
+    for dirobj in dirlist:
+        completeCount=0
+        majorCount=len(dirlist[dirobj])
+        for major in dirlist[dirobj]:
+            if major['status']==1:
+                completeCount+=1
+        if completeCount==majorCount:
+            delete_key_list.append(dirobj)
+    print(delete_key_list)
+    for deleteitem in delete_key_list:
+        dirlist.pop(deleteitem)
+    print_and_info(dirlist)
     taskqueue=queue.Queue()
     for onedir in dirlist:
         #if onedir=='政治与公共管理学院':
@@ -186,7 +200,7 @@ def college_batch_generate(type):
                 majorname=major_and_status['major']
                 status=major_and_status['status']
                 if status==0:
-                    major_generate(majorname,mapperObj，collegename)
+                    major_generate(majorname,mapperObj,collegename)
         else:#学院和专业都生成
             college_exec_generate_report(collegename,college_report_config['output_report_config'])
             for major_and_status in dirlist[collegename]:
@@ -237,7 +251,7 @@ def major_generate(majorname,mapperObj,collegename):
         split_path_list=os.path.split(downloadpath)
         reportconfig['download_filename']=split_path_list[0]+'\\'+collegename+'\\'+split_path_list[1]
         #新的下载路径如果不存在就新建一个
-        new_downloadpath=reportconfig['download_filename']=split_path_list[0]+'\\'+collegename
+        new_downloadpath=split_path_list[0]+'\\'+collegename
         if os.path.isdir(new_downloadpath)==False:
             os.mkdir(new_downloadpath)
 
@@ -246,6 +260,25 @@ def major_generate(majorname,mapperObj,collegename):
     print_and_info("------------------------")
     print_and_info("执行完毕!")
 
+def testdeletelist():
+    dirlist={'沙钢钢铁学院': [{'major': '冶金工程', 'status': 1}, {'major': '金属材料工程', 'status': 1}], '体育学院': [{'major': '武术与民族传统体育', 'status': 1}, {'major': '体育教育', 'status': 1}, {'major': '运动训练', 'status': 1}, {'major': '运动人体科学', 'status': 1}], '外国语学院': [{'major': '法语(法英双语)', 'status': 1}, {'major': '西班牙语', 'status': 1}, {'major': '日语', 'status': 1}, {'major': '翻译', 'status': 1}, {'major': '俄语(俄英双语)', 'status': 1}, {'major': '朝鲜语', 'status': 1}, {'major': '德语', 'status': 1}, {'major': '英语', 'status': 1}, {'major': '英语(师范)', 'status': 1}], '社会学院': [{'major': '历史学(师范)', 'status': 1}, {'major': '劳动与社会保障', 'status': 1}, {'major': '信息资源管理', 'status': 0}, {'major': '档案学', 'status': 0}, {'major': '旅游管理', 'status': 0}, {'major': '社会学', 'status': 0}], '文学院': [{'major': '汉语言文学', 'status': 0}, {'major': '汉语国际教育', 'status': 0}, {'major': '汉语言文学(基地)', 'status': 0}, {'major': '汉语言文学(师范)', 'status': 0}], '计算机科学与技术学院': [{'major': '信息管理与信息系统', 'status': 0}, {'major': '物联网工程', 'status': 0}, {'major': '软件工程(嵌入式软件人才培养)', 'status': 0}, {'major': '网络工程', 'status': 0}, {'major': '软件工程', 'status': 0}, {'major': '计算机科学与技术', 'status': 0}], '材料与化学化工学部': [{'major': '无机非金属材料工程', 'status': 0}, {'major': '化学工程与工艺', 'status': 0}, {'major': '应用化学', 'status': 0}, {'major': '环境工程', 'status': 0}, {'major': '高分子材料与工程', 'status': 0}, {'major': '材料科学与工程', 'status': 0}, {'major': '材料化学', 'status': 0}, {'major': '功能材料', 'status': 0}, {'major': '化学', 'status': 0}], '艺术学院': [{'major': '艺术设计学', 'status': 0}, {'major': '视觉传达设计', 'status': 0}, {'major': '服装与服饰设计', 'status': 0}, {'major': '环境设计', 'status': 0}, {'major': '美术学(师范)', 'status': 0}, {'major': '产品设计', 'status': 0}, {'major': '数字媒体艺术', 'status': 0}, {'major': '服装与服饰设计(时装表演与服装设计)', 'status': 0}, {'major': '美术学', 'status': 0}], '王健法学院': [{'major': '知识产权', 'status': 0}, {'major': '法学', 'status': 0}], '机电工程学院': [{'major': '机械电子工程', 'status': 0}, {'major': '工业工程', 'status': 0}, {'major': '电气工程及其自动化', 'status': 0}, {'major': '材料成型及控制工程', 'status': 0}, {'major': '机械工程', 'status': 0}], '纺织与服装工程学院': [{'major': '服装设计与工程', 'status': 0}, {'major': '纺织工程', 'status': 0}, {'major': '纺织工程(中外合作办学项目)', 'status': 0}, {'major': '非织造材料与工程', 'status': 0}, {'major': '轻化工程', 'status': 0}], '物理与光电·能源学部': [{'major': '物理学(师范)', 'status': 0}, {'major': '物理学', 'status': 0}, {'major': '光电信息科学与工程', 'status': 0}, {'major': '电子信息科学与技术', 'status': 0}, {'major': '新能源材料与器件', 'status': 0}, {'major': '能源与动力工程', 'status': 0}, {'major': '测控技术与仪器', 'status': 0}], '教育学院': [{'major': '应用心理学', 'status': 0}, {'major': '教育学(师范)', 'status': 0}, {'major': '教育技术学(师范)', 'status': 0}], '轨道交通学院': [{'major': '车辆工程', 'status': 0}, {'major': '电气工程与智能控制', 'status': 0}, {'major': '工程管理', 'status': 0}, {'major': '建筑环境与能源应用工程', 'status': 0}, {'major': '通信工程(城市轨道交通通信信号)', 'status': 0}, {'major': '交通运输', 'status': 0}], '数学科学学院': [{'major': '金融数学', 'status': 0}, {'major': '信息与计算科学', 'status': 0}, {'major': '数学与应用数学(基地)', 'status': 0}, {'major': '统计学', 'status': 0}, {'major': '数学与应用数学(师范)', 'status': 0}], '政治与公共管理学院': [{'major': '物流管理(中外合作办学项目)', 'status': 0}, {'major': '城市管理', 'status': 0}, {'major': '物流管理', 'status': 0}, {'major': '行政管理', 'status': 0}, {'major': '思想政治教育', 'status': 0}, {'major': '人力资源管理', 'status': 0}, {'major': '哲学', 'status': 0}, {'major': '管理科学', 'status': 0}, {'major': '公共事业管理', 'status': 0}], '传媒学院': [{'major': '广告学', 'status': 0}, {'major': '新闻学', 'status': 0}, {'major': '广播电视学', 'status': 0}, {'major': '播音与主持艺术', 'status': 0}], '医学部': [{'major': '食品质量与安全', 'status': 0}, {'major': '生物信息学', 'status': 0}, {'major': '法医学', 'status': 0}, {'major': '护理学', 'status': 0}, {'major': '生物科学', 'status': 0}, {'major': '医学影像学', 'status': 0}, {'major': '药学', 'status': 0}, {'major': '预防医学', 'status': 0}, {'major': '口腔医学', 'status': 0}, {'major': '生物技术', 'status': 0}, {'major': '中药学', 'status': 0}, {'major': '医学检验技术', 'status': 0}, {'major': '生物制药', 'status': 0}, {'major': '临床医学', 'status': 0}, {'major': '放射医学', 'status': 0}], '金螳螂建筑学院': [{'major': '城乡规划', 'status': 0}, {'major': '建筑学(室内设计)', 'status': 0}, {'major': '园艺', 'status': 0}, {'major': '风景园林', 'status': 0}, {'major': '建筑学', 'status': 0}], '电子信息学院': [{'major': '电子科学与技术', 'status': 0}, {'major': '信息工程', 'status': 0}, {'major': '通信工程', 'status': 0}, {'major': '电子信息工程', 'status': 0}, {'major': '微电子科学与工程', 'status': 0}, {'major': '通信工程(嵌入式软件人才培养)', 'status': 0}], '音乐学院': [{'major': '音乐表演', 'status': 0}, {'major': '音乐学(师范)', 'status': 0}], '东吴商学院(财经学院)': [{'major': '市场营销', 'status': 0}, {'major': '金融学(中外合作办学项目)', 'status': 0}, {'major': '会计学', 'status': 0}, {'major': '财政学', 'status': 0}, {'major': '工商管理', 'status': 0}, {'major': '财务管理', 'status': 0}, {'major': '国际经济与贸易', 'status': 0}, {'major': '金融学', 'status': 0}, {'major': '经济学', 'status': 0}, {'major': '电子商务', 'status': 0}]}
+    print(len(dirlist))
+    delete_key_list=[]
+    for dirobj in dirlist:
+        completeCount=0
+        majorCount=len(dirlist[dirobj])
+        for major in dirlist[dirobj]:
+            if major['status']==1:
+                completeCount+=1
+        if completeCount==majorCount:
+            delete_key_list.append(dirobj)
+    print(delete_key_list)
+    for deleteitem in delete_key_list:
+        dirlist.pop(deleteitem)
+    print(dirlist)
+    print(len(dirlist))
+
 if __name__ == "__main__":
     college_batch_generate(type=3)
     #major_generate('播音与主持艺术')
+    #testdeletelist()

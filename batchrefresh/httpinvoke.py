@@ -4,6 +4,8 @@ import decorator
 import json
 import util
 import logging
+import subprocess
+import traceback
 
 logger=util.create_logger(logging.INFO,'httpinvoke')
 back_logger=util.create_logger(logging.INFO,'back_logger')
@@ -64,14 +66,28 @@ def wrap_generate_and_download_report(config):
 
 #发出生成报告请求
 def generate_report(url,cookies,params=None):
-    response = requests.get(url, cookies=cookies,params=params)
-    util.print_and_info(response.text)
-    return response.text
+    result=''
+    try:
+        response = requests.get(url, cookies=cookies,params=params)
+        print_and_info(response.text)
+        result=response.text
+    except:
+        stack_msg=traceback.format_exc()
+        print_and_info(stack_msg)
+        ping('10.10.3.225')
+    return result
 #查询报告生成状态
 def search_generator_status(searchurl,cookies):
-    searchresponse = requests.get(searchurl, cookies=cookies)
-    util.print_and_info(searchresponse.text)
-    return searchresponse.text
+    result=''
+    try:
+        searchresponse = requests.get(searchurl, cookies=cookies)
+        print_and_info(searchresponse.text)
+        result=searchresponse.text
+    except:
+        stack_msg=traceback.format_exc()
+        print_and_info(stack_msg)
+        ping('10.10.3.225')
+    return result
 #下载报告
 def download_report(downloadurl,cookies,params,file_name):
     with open(file_name, "wb") as file:
@@ -81,6 +97,10 @@ def download_report(downloadurl,cookies,params,file_name):
         # write to file
         file.write(download_response.content)
 
+def ping(ipaddress):
+    cmdline='ping '+ipaddress
+    execresult=subprocess.getstatusoutput(cmdline)
+    print_and_info(execresult)
 
 cookies={
         'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTcxNDIwMzl9.UwU11TRLhf5W23E9JRlJiUdl34CNdlsW8tZVMpprn81oEgjg1YJjgFpT6jVPYQ4YCegz3mK2oBvn_0kWaNDuhdJnXGuYELuxh8niVRCVlC4Zp7Lq4F3s3WPAWc4RPxR-nLODKfRFFmHT5af0CJcr35VhjRAp8QZjNSH8KvYGvFY',
