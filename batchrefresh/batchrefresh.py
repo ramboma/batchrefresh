@@ -4,6 +4,7 @@ import sys
 import os
 import queue
 import logging
+import copy
 
 import fileexport
 import publish
@@ -167,10 +168,11 @@ def college_batch_generate(type):
         dirlist.pop(deleteitem)
     print_and_info(dirlist)
     taskqueue=queue.Queue()
+    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院']
     for onedir in dirlist:
-        #if onedir=='政治与公共管理学院':
-        taskqueue.put(onedir)
-        print_and_info(onedir)
+        if onedir not in noinqueue:
+            taskqueue.put(onedir)
+            print_and_info(onedir)
 
     print_and_info("------------------------")
     while True:
@@ -243,17 +245,20 @@ def major_generate(majorname,mapperObj,collegename):
         reportid=output_config['planId']
         reportname=output_config['reportname'].format(majorname)
 
-        reportconfig=major_report_config['http_config']
+        reportconfig=copy.deepcopy(major_report_config['http_config'])
         reportconfig['generate_param']['planId']=reportid
         reportconfig['generate_param']['generateName']=reportname
         #下载报告到学院名的目录中,便于管理
         downloadpath=reportconfig['download_filename']
         split_path_list=os.path.split(downloadpath)
-        reportconfig['download_filename']=split_path_list[0]+'\\'+collegename+'\\'+split_path_list[1]
+        prepart=split_path_list[0]
+        afterpart=split_path_list[1]
+        reportconfig['download_filename']=prepart+'\\'+collegename+'\\'+afterpart
         #新的下载路径如果不存在就新建一个
-        new_downloadpath=split_path_list[0]+'\\'+collegename
+        new_downloadpath=prepart+'\\'+collegename
         if os.path.isdir(new_downloadpath)==False:
             os.mkdir(new_downloadpath)
+        print('new path is '+new_downloadpath)
 
         httpinvoke.wrap_generate_and_download_report(reportconfig)
     mapperObj.set_major_status(majorname,1)
@@ -279,6 +284,7 @@ def testdeletelist():
     print(len(dirlist))
 
 if __name__ == "__main__":
-    college_batch_generate(type=3)
-    #major_generate('播音与主持艺术')
+    college_batch_generate(type=1)
+    #mapperObj=majorcollege2dict(college_major_mapping_path)
+    #major_generate('播音与主持艺术',mapperObj,'文学院')
     #testdeletelist()
