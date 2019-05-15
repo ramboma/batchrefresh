@@ -15,7 +15,6 @@ def print_and_info(msg):
     print(msg)
 def backlog(msg):
     back_logger.info(msg)
-@decorator.exception
 def wrap_generate_and_download_report(config):
     util.print_and_info(config)
         
@@ -27,8 +26,16 @@ def wrap_generate_and_download_report(config):
     download_filename=config['download_filename']
     cookies=config['cookies']
 
-    result=generate_report(generate_url,cookies,generate_param)
-    generateResultObj=json.loads(result)
+    result=''
+    try:
+        result=generate_report(generate_url,cookies,generate_param)
+        generateResultObj=json.loads(result)
+    except:
+        stack_msg=traceback.format_exc()
+        print_and_info(stack_msg)
+        ping('10.10.3.225')
+        return
+    
     #判断报告生成请求是否发送成功
     if(generateResultObj['code']==0):
         print_and_info("生成报告失败!错误原因:{}".format(generateResultObj['msg']))
@@ -45,7 +52,7 @@ def wrap_generate_and_download_report(config):
         if(statusResultObj['code']==0):#如果调用接口失败,等待300ms重试,5次后中断
             print_and_info('生成状态调用失败,错误原因:{}'.format(statusResultObj['msg']))
             repeatCount=repeatCount+1
-            if repeatCount>=5:
+            if repeatCount>=15:
                 break
         if(statusResultObj['data']['planProcessState']=='1'):
             print_and_info('报表生成成功!正在下载...')
@@ -63,18 +70,11 @@ def wrap_generate_and_download_report(config):
             print('报表生成中...,信息:{}'.format(statusResultObj['data']['planProcessInfo']))
             #间隔5s再查
             time.sleep(10)
-
 #发出生成报告请求
 def generate_report(url,cookies,params=None):
-    result=''
-    try:
-        response = requests.get(url, cookies=cookies,params=params)
-        print_and_info(response.text)
-        result=response.text
-    except:
-        stack_msg=traceback.format_exc()
-        print_and_info(stack_msg)
-        ping('10.10.3.225')
+    response = requests.get(url, cookies=cookies,params=params)
+    print_and_info(response.text)
+    result=response.text
     return result
 #查询报告生成状态
 def search_generator_status(searchurl,cookies):

@@ -169,7 +169,7 @@ def college_batch_generate(type):
         dirlist.pop(deleteitem)
     print_and_info(dirlist)
     taskqueue=queue.Queue()
-    noinqueue=[]#['沙钢钢铁学院','社会学院','体育学院','外国语学院']#不生成的学院列表
+    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院']#不生成的学院列表
     for onedir in dirlist:
         if onedir not in noinqueue:
             taskqueue.put(onedir)
@@ -216,16 +216,25 @@ def college_batch_generate(type):
 #生成学院报告
 @decorator.timing
 def college_exec_generate_report(collegename,college_report_output_config):
+    # 生成线程
+    threads=[]
     # 循环调用报告生成接口
     for output_config in college_report_output_config:
         reportid=output_config['planId']
         reportname=output_config['reportname'].format(collegename)
 
-        reportconfig=college_report_config['http_config']
+        reportconfig=copy.deepcopy(college_report_config['http_config'])
         reportconfig['generate_param']['planId']=reportid
         reportconfig['generate_param']['generateName']=reportname
 
-        httpinvoke.wrap_generate_and_download_report(reportconfig)
+
+        workthread=threading.Thread(target=httpinvoke.wrap_generate_and_download_report,args=(reportconfig,))
+        threads.append(workthread)
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
     print_and_info('{}学院报告生成完毕!'.format(collegename))
 def major_generate(majorname,mapperObj,collegename):
     print_and_info('开始处理{}专业---'.format(majorname))
@@ -294,7 +303,7 @@ def testdeletelist():
     print(len(dirlist))
 
 if __name__ == "__main__":
-    college_batch_generate(type=2)
+    college_batch_generate(type=1)
     #mapperObj=majorcollege2dict(college_major_mapping_path)
     #major_generate('播音与主持艺术',mapperObj,'文学院')
     #testdeletelist()
