@@ -7,6 +7,7 @@ import util
 logger=util.create_logger(logging.INFO,'publish')
 @decorator.exception
 def exec_publish(cmdline):#执行发布脚本并返回
+    logger.info(cmdline)
     print(cmdline)
     execresult=subprocess.getstatusoutput(cmdline)
     logger.info(execresult)

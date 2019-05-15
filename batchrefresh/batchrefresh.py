@@ -169,12 +169,16 @@ def college_batch_generate(type):
         dirlist.pop(deleteitem)
     print_and_info(dirlist)
     taskqueue=queue.Queue()
-    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院']#不生成的学院列表
+    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院','机电工程学院','文学院']#不生成的学院列表
+    inqueue=['东吴商学院(财经学院)','纳米科学技术学院']
+    dirlist=inqueue
     for onedir in dirlist:
-        if onedir not in noinqueue:
+        #if onedir not in noinqueue:
+        if onedir in inqueue:
             taskqueue.put(onedir)
             print_and_info(onedir)
 
+    print(taskqueue)
     print_and_info("------------------------")
     while True:
         if taskqueue.empty():
