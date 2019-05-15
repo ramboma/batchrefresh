@@ -5,6 +5,7 @@ import os
 import queue
 import logging
 import copy
+import threading
 
 import fileexport
 import publish
@@ -119,7 +120,7 @@ major_report_config={
     #输出的报告类型配置,planid是使用的方案,reportname是生成报告的格式,{}用专业名称填充
     'output_report_config':[
         {
-            'planId':'39','reportname':'{}专业2018届本科毕业生社会需求与人才培养质量报告'
+            'planId':'39','reportname':'{}专业2018届本科毕业生社会需求与人才培养调研结果'
         },
         {
             'planId':'50','reportname':'{}专业2016-2018届本科毕业生调研结果对比分析'
@@ -168,7 +169,7 @@ def college_batch_generate(type):
         dirlist.pop(deleteitem)
     print_and_info(dirlist)
     taskqueue=queue.Queue()
-    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院']
+    noinqueue=[]#['沙钢钢铁学院','社会学院','体育学院','外国语学院']#不生成的学院列表
     for onedir in dirlist:
         if onedir not in noinqueue:
             taskqueue.put(onedir)
@@ -240,6 +241,8 @@ def major_generate(majorname,mapperObj,collegename):
         backlog("{}更新数据源失败".format(majorname))
         return
     backlog("{}更新数据源成功".format(majorname))
+    # 生成线程
+    threads=[]
     # 调用报告生成接口
     for output_config in major_report_config['output_report_config']:
         reportid=output_config['planId']
@@ -260,7 +263,14 @@ def major_generate(majorname,mapperObj,collegename):
             os.mkdir(new_downloadpath)
         print('new path is '+new_downloadpath)
 
-        httpinvoke.wrap_generate_and_download_report(reportconfig)
+        workthread=threading.Thread(target=httpinvoke.wrap_generate_and_download_report,args=(reportconfig,))
+        threads.append(workthread)
+        #httpinvoke.wrap_generate_and_download_report(reportconfig)
+    
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
     mapperObj.set_major_status(majorname,1)
     print_and_info("------------------------")
     print_and_info("执行完毕!")
@@ -284,7 +294,7 @@ def testdeletelist():
     print(len(dirlist))
 
 if __name__ == "__main__":
-    college_batch_generate(type=1)
+    college_batch_generate(type=2)
     #mapperObj=majorcollege2dict(college_major_mapping_path)
     #major_generate('播音与主持艺术',mapperObj,'文学院')
     #testdeletelist()
