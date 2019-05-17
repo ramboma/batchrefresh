@@ -1,0 +1,4 @@
+requests==2.19.1
+Click==7.0
+openpyxl==2.5.8
+setuptools==40.6.2

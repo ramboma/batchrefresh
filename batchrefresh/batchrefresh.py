@@ -59,9 +59,9 @@ college_report_config={
         'download_param':{"planProcessInfoId":"{}"},
         'download_filename':r'e:\newjincin\projects\ros\doc\refresh\output\分学院\{}.docx',
         'cookies':{
-            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTc5Njg5MjN9.bIf4Rni6TEGfcSSHtif9upUpOz_zPXMUNp98F4dJ8waMn6NVNwpM50ZG3kuPd3PSEnNrcN5j2s3pFaaMpMC8YL23fWac1lA_EvKUYg3VvzMBgjOQKhnnV20OeC6e8bvHN6qfGbNEBxgARLuz3T8dpyk1GULuZNjinTr4BxJjH7g',
+            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTgwNzY2Mjh9.zY9gZZLuLTgUwIMmytMzTXDY79yhUc5xw6miNLRly9K19Haelw9ilpgwg24J6VY93j4fyIGmrmwKfr_UMI7tg9tMQwUlfrDhaKwQA6ll8lOgCafdEDrSe-h_rACT4j0kfaazxI3wl5w8HK3ka9MBtvPstkSa2hsTSDNkTaNFLMg',
             'JSESSIONID':'F420351B4AD953795A66AC498B0FF18E',
-            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTc5Njg5MjN9.bIf4Rni6TEGfcSSHtif9upUpOz_zPXMUNp98F4dJ8waMn6NVNwpM50ZG3kuPd3PSEnNrcN5j2s3pFaaMpMC8YL23fWac1lA_EvKUYg3VvzMBgjOQKhnnV20OeC6e8bvHN6qfGbNEBxgARLuz3T8dpyk1GULuZNjinTr4BxJjH7g',
+            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTgwNzY2Mjh9.zY9gZZLuLTgUwIMmytMzTXDY79yhUc5xw6miNLRly9K19Haelw9ilpgwg24J6VY93j4fyIGmrmwKfr_UMI7tg9tMQwUlfrDhaKwQA6ll8lOgCafdEDrSe-h_rACT4j0kfaazxI3wl5w8HK3ka9MBtvPstkSa2hsTSDNkTaNFLMg',
         }
     },
     #输出的报告类型配置,planid是使用的方案,reportname是生成报告的格式,{}用专业名称填充
@@ -112,9 +112,9 @@ major_report_config={
         'download_param':{"planProcessInfoId":"{}"},
         'download_filename':r'e:\newjincin\projects\ros\doc\refresh\output\分专业\{}.docx',
         'cookies':{
-            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTc5Njg5MjN9.bIf4Rni6TEGfcSSHtif9upUpOz_zPXMUNp98F4dJ8waMn6NVNwpM50ZG3kuPd3PSEnNrcN5j2s3pFaaMpMC8YL23fWac1lA_EvKUYg3VvzMBgjOQKhnnV20OeC6e8bvHN6qfGbNEBxgARLuz3T8dpyk1GULuZNjinTr4BxJjH7g',
+            'Admin-Token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTgwNzY2Mjh9.zY9gZZLuLTgUwIMmytMzTXDY79yhUc5xw6miNLRly9K19Haelw9ilpgwg24J6VY93j4fyIGmrmwKfr_UMI7tg9tMQwUlfrDhaKwQA6ll8lOgCafdEDrSe-h_rACT4j0kfaazxI3wl5w8HK3ka9MBtvPstkSa2hsTSDNkTaNFLMg',
             'JSESSIONID':'F420351B4AD953795A66AC498B0FF18E',
-            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTc5Njg5MjN9.bIf4Rni6TEGfcSSHtif9upUpOz_zPXMUNp98F4dJ8waMn6NVNwpM50ZG3kuPd3PSEnNrcN5j2s3pFaaMpMC8YL23fWac1lA_EvKUYg3VvzMBgjOQKhnnV20OeC6e8bvHN6qfGbNEBxgARLuz3T8dpyk1GULuZNjinTr4BxJjH7g',
+            'token':'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb3MtbWFqb3IiLCJ1c2VySWQiOiI2ODI5MDMiLCJuYW1lIjoiUk9T5pON5L2c5Lq65ZGYIiwicm9sZXMiOlt7ImlkIjoyOSwiY29kZSI6bnVsbCwibmFtZSI6IlJPUyIsInN0YXR1cyI6bnVsbCwiY29sbGVnZUxpc3QiOm51bGwsIm1hbmFnZVNjb3BlTGlzdCI6bnVsbH1dLCJyb2xlVHlwZSI6IjAiLCJleHAiOjE1NTgwNzY2Mjh9.zY9gZZLuLTgUwIMmytMzTXDY79yhUc5xw6miNLRly9K19Haelw9ilpgwg24J6VY93j4fyIGmrmwKfr_UMI7tg9tMQwUlfrDhaKwQA6ll8lOgCafdEDrSe-h_rACT4j0kfaazxI3wl5w8HK3ka9MBtvPstkSa2hsTSDNkTaNFLMg',
         }
     },
     #输出的报告类型配置,planid是使用的方案,reportname是生成报告的格式,{}用专业名称填充
@@ -169,12 +169,12 @@ def college_batch_generate(type):
         dirlist.pop(deleteitem)
     print_and_info(dirlist)
     taskqueue=queue.Queue()
-    noinqueue=['沙钢钢铁学院','社会学院','体育学院','外国语学院','机电工程学院','文学院']#不生成的学院列表
-    inqueue=['东吴商学院(财经学院)','纳米科学技术学院']
-    dirlist=inqueue
+    noinqueue=[]#不生成的学院列表
+    #inqueue=['轨道交通学院']
+    #dirlist=inqueue
     for onedir in dirlist:
-        #if onedir not in noinqueue:
-        if onedir in inqueue:
+        if onedir not in noinqueue:
+        #if onedir in inqueue:
             taskqueue.put(onedir)
             print_and_info(onedir)
 
@@ -284,6 +284,7 @@ def major_generate(majorname,mapperObj,collegename):
         thread.start()
     for thread in threads:
         thread.join()
+    #需要加异常管理
     mapperObj.set_major_status(majorname,1)
     print_and_info("------------------------")
     print_and_info("执行完毕!")
@@ -307,7 +308,7 @@ def testdeletelist():
     print(len(dirlist))
 
 if __name__ == "__main__":
-    college_batch_generate(type=1)
+    college_batch_generate(type=2)
     #mapperObj=majorcollege2dict(college_major_mapping_path)
     #major_generate('播音与主持艺术',mapperObj,'文学院')
     #testdeletelist()
